@@ -3,26 +3,43 @@
         cols: 2
         spacing: 10
         padding: 10
+
         Label:
-            text: 'Rent'
+            text: 'Renter:'
+        TextInput:
+            id: rent_name
+            multiline: False
+        Label:
+            text: 'Owner:'
+        TextInput:
+            id: owner_name
+            multiline: False
+
+        Label:
+            text: 'Rent:'
         TextInput:
             id: rent_id
             multiline: False
         Label:
-            text: 'Utilities'
+            text: 'Utilities:'
         TextInput:
             id: utilities_id
             multiline: False
         Label:
-            text: 'Period'
+            text: 'Period:'
         TextInput:
             id: period_id
             multiline: False
         Label:
-            text: 'Mail'
+            text: 'Mail:'
         TextInput:
             id: mail_id
             multiline: False
+        Label:
+            text: 'Additional Information:'
+        TextInput:
+            id: information
+            multiline: True
         Button:
             text: 'Calculate'
             on_press: root.calculate()
@@ -40,10 +57,13 @@
             text: ''
         Button:
             text: 'Create PDF'
-            on_press: root.generate()
+            on_press: root.generate_pdf()
         Label:
             id: link
             text:''
+        Button:
+            text: 'Open Link'
+            on_press: root.open_link()
         Button:
             text: 'Send Email'
             on_press: root.send_email()
