@@ -1,0 +1,61 @@
+<BillsScreen>:
+    GridLayout:
+        cols: 2
+        spacing: 10
+        padding: 10
+        Label:
+            text: 'Rent'
+        TextInput:
+            id: rent_id
+            multiline: False
+        Label:
+            text: 'Utilities'
+        TextInput:
+            id: utilities_id
+            multiline: False
+        Label:
+            text: 'Period'
+        TextInput:
+            id: period_id
+            multiline: False
+        Label:
+            text: 'Mail'
+        TextInput:
+            id: mail_id
+            multiline: False
+        Button:
+            text: 'Calculate'
+            on_press: root.calculate()
+
+<CreatePdf>:
+    GridLayout:
+        cols: 1
+        spacing: 10
+        padding: 10
+        Label:
+            id: bills
+            text: ''
+        Label:
+            id: date
+            text: ''
+        Button:
+            text: 'Create PDF'
+            on_press: root.generate()
+        Label:
+            id: link
+            text:''
+        Button:
+            text: 'Send Email'
+            on_press: root.send_email()
+
+
+
+<RootWidget>:
+    BillsScreen:
+        id: bills_screen
+        name:'bills_screen'
+
+    CreatePdf:
+        id: create_pdf
+        name: 'create_pdf'
+
