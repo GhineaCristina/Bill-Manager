@@ -1,76 +1,132 @@
 <BillsScreen>:
+    canvas.before:
+        Color:
+            rgba: 0.5, 0.7, 0.9, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
     GridLayout:
         cols: 2
-        spacing: 10
-        padding: 10
+        spacing: dp(10)
+        padding: dp(40)
 
         Label:
             text: 'Renter:'
+            size_hint_x: 0.3
         TextInput:
             id: rent_name
             multiline: False
+            background_color: 1, 1, 1, 1
+            size_hint_x: 0.7
+
         Label:
             text: 'Owner:'
+            size_hint_x: 0.3
         TextInput:
             id: owner_name
             multiline: False
+            background_color: 1, 1, 1, 1
+            size_hint_x: 0.7
 
         Label:
             text: 'Rent:'
+            size_hint_x: 0.3
         TextInput:
             id: rent_id
             multiline: False
+            background_color: 1, 1, 1, 1
+            size_hint_x: 0.7
+
         Label:
             text: 'Utilities:'
+            size_hint_x: 0.3
         TextInput:
             id: utilities_id
             multiline: False
+            background_color: 1, 1, 1, 1
+            size_hint_x: 0.7
+
         Label:
             text: 'Period:'
+            size_hint_x: 0.3
         TextInput:
             id: period_id
             multiline: False
-        Label:
-            text: 'Mail:'
-        TextInput:
-            id: mail_id
-            multiline: False
+            background_color: 1, 1, 1, 1
+            size_hint_x: 0.7
+
         Label:
             text: 'Additional Information:'
+            size_hint_x: 0.3
         TextInput:
             id: information
             multiline: True
+            background_color: 1, 1, 1, 1
+            size_hint_x: 0.7
+
         Button:
             text: 'Calculate'
             on_press: root.calculate()
+            font_size: '24'
+            underline: False
+            background_color: 0.8, 0.9, 0.6, 1
+            size_hint: 0.3,0.7
+            pos_hint: (500, 10)
 
 <CreatePdf>:
+    canvas.before:
+        Color:
+            rgba: 0.5, 0.7, 0.9, 1  # Background color
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
     GridLayout:
         cols: 1
-        spacing: 10
-        padding: 10
+        spacing: dp(10)
+        padding: dp(60)
+
         Label:
             id: bills
             text: ''
+            size_hint_y: 0.1
         Label:
             id: date
             text: ''
+            size_hint_y: 0.1
         Button:
             text: 'Create PDF'
             on_press: root.generate_pdf()
+            size_hint: 0.3,0.7
         Label:
             id: link
             text:''
+            size_hint_y: 0.2
         Button:
             text: 'Open Link'
             on_press: root.open_link()
+            size_hint: 0.3,0.7
+        Label:
+            text: 'The recipient email:'
+            size_hint_y: 0.5
+        TextInput:
+            id: mail_id
+            multiline: False
+            size_hint_y: 0.3
         Button:
             text: 'Send Email'
             on_press: root.send_email()
+            size_hint: 0.3,0.7
+        Label:
+            id: link_email
+            text:''
+            size_hint_y: 0.2
 
 
 
 <RootWidget>:
+
     BillsScreen:
         id: bills_screen
         name:'bills_screen'

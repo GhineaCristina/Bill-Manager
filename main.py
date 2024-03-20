@@ -5,12 +5,23 @@ from kivy.lang import Builder
 from filesharer import PdfReport, FileSharer, Fields
 import webbrowser
 import os
+import yagmail
+from personal_email import my_email, my_password
 
 
 Builder.load_file('frontend.kv')
 
+
 class BillsScreen(Screen):
+    """Represents a screen in the application for entering bill information.
+
+    Attributes:
+        manager (ScreenManager): The screen manager responsible for handling screen transitions.
+    """
+
     def calculate(self):
+        #  Calculate the total amount of the bill based on the entered rent
+        #and utilities. Then, transitions to the 'create_pdf' screen.
         try:
             rent = float(self.ids.rent_id.text)
             utilities = float(self.ids.utilities_id.text)
@@ -22,61 +33,83 @@ class BillsScreen(Screen):
             print("Enter valid numbers for rent and utilities!")
 
 
-
-
-
 class CreatePdf(Screen):
+    """Represents a screen in the application for generating PDF bills and performing related actions.
+
+        Attributes:
+            manager (ScreenManager): The screen manager responsible for handling screen transitions.
+            url (str): The URL of the shared PDF file.
+        """
 
     def on_enter(self, *args):
-        # Call the total() method to update the label when the screen is entered.
+        # Callback method invoked when the screen is entered.
+        # Calls the 'total' and 'date' methods to update displayed information.
         self.total()
         self.date()
 
     def total(self):
-        # Access the amount using self.manager.amount
+        # Update the displayed total bill amount on the screen.
         self.ids.bills.text = f'Total Bill: ${self.manager.amount:.2f}'
 
     def date(self):
+        # Update the displayed current date on the screen.
         current_time = time.strftime('%Y-%m-%d')
         self.ids.date.text = f'Date: {current_time}'
 
     def generate_pdf(self):
+        # Generate a PDF bill report, share it, and update the link on the screen
         fields = Fields(self.manager, self.manager.amount)
         current_date = time.strftime('%Y-%m-%d')
         filename = f"{current_date}.pdf"
-        filepath = os.path.join("files", filename)  # This ensures the path is built correctly for all OS
+        filepath = os.path.join("files", filename)  # Ensures the path is built correctly for all OS
 
-        # Create an instance of PdfReport with the correct file path
         pdf_report = PdfReport(filename=filename, fields=fields)
-
-        # Generate the PDF report
         pdf_report.generate()
 
-        # Create an instance of FileSharer with the filepath
         filesharer = FileSharer(filepath=filepath)
-
-        # Share the file and get the URL
-        self.url = filesharer.share()
-
-        # Display the URL
-        self.ids.link.text = self.url
+        self.url = filesharer.share()  # Share the file and get the URL
+        self.ids.link.text = self.url  # Display the URL
 
     def open_link(self):
-        """Open link with default browser"""
+        # Open link with default browser
         try:
             webbrowser.open(self.url)
         except:
-            self.ids.link.text = self.link_message
+            self.ids.link.text = "Create a PDF first!"
 
     def send_email(self):
-        pass
+        # Send the PDF bill report via email to the specified recipient.
+        recipient_email = self.ids.mail_id.text
+        filename = f"files/{time.strftime('%Y-%m-%d')}.pdf"
+
+        yag = yagmail.SMTP(my_email, my_password)  # Set up the yagmail SMTP server
+        subject = 'Bill Report'
+        contents = 'Please find attached the bill report.'
+
+        # Attach the PDF file
+        try:
+            yag.send(to=recipient_email, subject=subject, contents=contents, attachments=filename)
+            self.ids.link_email.text = "Email sent successfully."
+        except Exception as e:
+            self.ids.link_email.text = "Enter a valid email address!"
+            print(f"Error sending email: {e}")
+
 
 class RootWidget(ScreenManager):
+    """
+       Represents the root widget of the application,
+    responsible for managing screens and screen transitions.
+    """
     pass
 
+
 class MainApp(App):
+    """Represents the main application class responsible for
+    running the application.
+    """
 
     def build(self):
         return RootWidget()
 
+# Run the application
 MainApp().run()
